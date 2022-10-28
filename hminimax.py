@@ -4,7 +4,8 @@ import math
 
 def eval(state):
     """
-    Given a pacman game state, returns a score base on the current state (like utility).
+    Given a pacman game state, 
+    returns a score base on the current state (like utility).
 
     Arguments:
     ----------
@@ -22,7 +23,8 @@ def eval(state):
 
 def food_distances(state):
     """
-    Given a pacman game state, returns a list of all manathan distances between Pacman and foods.
+    Given a pacman game state, 
+    returns a list of all manathan distances between Pacman and foods.
 
     Arguments:
     ----------
@@ -61,7 +63,8 @@ def food_heuristic(state):
 
 def ghost_distance(state):
     """
-    Given a pacman game state, returns the manhattan distance between the ghost and pacman.
+    Given a pacman game state, 
+    returns the manhattan distance between the ghost and pacman.
 
     Arguments:
     ----------
@@ -79,7 +82,8 @@ def ghost_distance(state):
 
 def cutoff(before_state, state, depth):
     """
-    Given two pacman game states and the current depth, returns a Boolean based on the two games states.
+    Given two pacman game states and the current depth, 
+    returns a Boolean based on the two games states.
 
     Arguments:
     ----------
@@ -89,7 +93,10 @@ def cutoff(before_state, state, depth):
     -------
     - A Boolean based on the two games states.
     """
-    return state.getNumFood() < before_state.getNumFood() or depth <= 0 or state.isWin() or state.isLose()
+    return (
+        state.getNumFood() < before_state.getNumFood() 
+        or depth <= 0 or state.isWin() or state.isLose()
+    )
 
 
 class PacmanAgent(Agent):
@@ -106,7 +113,8 @@ class PacmanAgent(Agent):
 
         Arguments:
         ----------
-        - 'state': the current game state. See FAQ and class 'pacman.GameState'.
+        - 'state': the current game state. 
+        See FAQ and class 'pacman.GameState'.
 
         Return:
         -------
@@ -122,11 +130,13 @@ class PacmanAgent(Agent):
 
     def minimax(self, state, is_max_agent, before_state, depth):
         """
-        Given a pacman game state, returns a list of legal moves to solve the search layout.
+        Given a pacman game state, 
+        returns a list of legal moves to solve the search layout.
 
         Arguments:
         ----------
-        - 'state': the current game state. See FAQ and class 'pacman.GameState'.
+        - 'state': the current game state. 
+        See FAQ and class 'pacman.GameState'.
 
         Return:
         -------
