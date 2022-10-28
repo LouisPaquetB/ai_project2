@@ -40,7 +40,7 @@ class PacmanAgent(Agent):
 
     def terminal_test(self, state):
         """
-        Given a game state, 
+        Given a game state,
         returns Boolean that specify if the game state is terminal.
 
         Arguments:
@@ -55,17 +55,17 @@ class PacmanAgent(Agent):
 
     def minimax(self, state, is_max_agent, before_state):
         """
-        Given a pacman game state, 
+        Given a pacman game state,
         returns a list of legal moves to solve the search layout.
 
         Arguments:
         ----------
-        - 'state': the current game state. 
+        - 'state': the current game state.
         See FAQ and class 'pacman.GameState'.
 
         Return:
         -------
-        - A list of tuples with a score for the node 
+        - A list of tuples with a score for the node
         and a legal moves as defined in 'game.Directions'.
         """
         if self.terminal_test(state):
