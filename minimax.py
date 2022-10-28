@@ -1,22 +1,13 @@
-from audioop import minmax
-from pacman_module.game import Agent
-from pacman_module.pacman import Directions
-from pacman_module.util import Queue, PriorityQueue, manhattanDistance
-import math
+from pacman_module.game import Agent, Directions
+
 
 class PacmanAgent(Agent):
     """
-    A Pacman agent based on Depth-First-Search.
+    A Pacman agent based on Minimax.
     """
 
     def __init__(self):
-        """
-        Arguments:
-        ----------
-        - `args`: Namespace of arguments from command-line prompt.
-        """
         super().__init__()
-        self.moves = []
 
     def get_action(self, state):
         """
@@ -24,58 +15,68 @@ class PacmanAgent(Agent):
 
         Arguments:
         ----------
-        - `state`: the current game state. See FAQ and class
-                   `pacman.GameState`.
+        - state: the current game state. See FAQ and class 'pacman.GameState'.
 
         Return:
         -------
-        - A legal move as defined in `game.Directions`.
+        - A legal move as defined in 'game.Directions'.
         """
-        _, action = self.minimax(state, True,state)
+        _, action = self.minimax(state, True, state)
         return action
 
     def utility(self, state):
-        foodGrid = state.getFood()
-        pacman_pos = state.getPacmanPosition()
-        
-        distances = []
-
-        for i in range(foodGrid.width):
-            for j in range(foodGrid.height):
-                if foodGrid[i][j]:
-                    distances.append(manhattanDistance((i, j), pacman_pos))
-        size = len(distances)
-        return state.getScore() - (sum(distances) / size if size != 0 else 0)
-
-    def minimax(self, state, is_max_agent, before_state):
         """
-        Given a pacman game state,
-        returns a list of legal moves to solve the search layout.
+        Given a terminal game state, returns a score.
 
         Arguments:
         ----------
-        - `state`: the current game state. See FAQ and class
-                   `pacman.GameState`.
+        - state: the current game state. See FAQ and class 'pacman.GameState'.
 
         Return:
         -------
-        - A list of legal moves as defined in `game.Directions`.
+        - A Score based on the current state.
         """
-        if state.isWin() or state.isLose():
-            return self.utility(state), Directions.STOP
-        
-        successors = []
-        if is_max_agent:
-            for next_state, action in state.generatePacmanSuccessors():
-                if not before_state == next_state:
-                    value, _ = self.minimax(next_state, False, state)
-                    successors.append((value, action))
-            return max(successors)
-        else:
-            for next_state, action in state.generateGhostSuccessors(1):
-                if not before_state == next_state:
-                    value, _ = self.minimax(next_state, True,state)
-                    successors.append((value, action))
-            return min(successors)
+        return state.getScore()
 
-        
+    def terminal_test(self, state):
+        """
+        Given a game state, returns Boolean that specify if the game state is terminal.
+
+        Arguments:
+        ----------
+        - state: the current game state. See FAQ and class 'pacman.GameState'.
+
+        Return:
+        -------
+        - A Boolean that specify if the game state is terminal
+        """
+        return state.isWin() or state.isLose()
+
+    def minimax(self, state, is_max_agent, before_state):
+        """
+        Given a pacman game state, returns a list of legal moves to solve the search layout.
+
+        Arguments:
+        ----------
+        - 'state': the current game state. See FAQ and class 'pacman.GameState'.
+
+        Return:
+        -------
+        - A list of tuples with a score for the node and a legal moves as defined in 'game.Directions'.
+        """
+        if self.terminal_test(state):
+            return self.utility(state), Directions.STOP
+        else:
+            successors = []
+            if is_max_agent:
+                for next_state, action in state.generatePacmanSuccessors():
+                    if not before_state == next_state:
+                        value, _ = self.minimax(next_state, False, state)
+                        successors.append((value, action))
+                return max(successors)
+            else:
+                for next_state, action in state.generateGhostSuccessors(1):
+                    if not before_state == next_state:
+                        value, _ = self.minimax(next_state, True, state)
+                        successors.append((value, action))
+                return min(successors)
